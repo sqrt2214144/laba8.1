@@ -1,0 +1,156 @@
+        -:    0:Source:lab8.cpp
+        -:    0:Graph:lab8.gcno
+        -:    0:Data:lab8.gcda
+        -:    0:Runs:1
+        -:    1: 
+        -:    2:#include <iostream>
+        -:    3:#include <vector>
+        -:    4:#include <cassert>
+        -:    5:#include <stdexcept>
+        -:    6:#include <climits>
+        -:    7:
+        -:    8:// Клас Algorithms, реалізація всередині main.cpp для тестів
+        -:    9:class Algorithms {
+        -:   10:public:
+        2:   11:    static int findMinPositive(const std::vector<int>& arr) {
+        2:   12:        int minPositive = INT_MAX;
+        2:   13:        bool found = false;
+        -:   14:
+        9:   15:        for (int num : arr) {
+        7:   16:            if (num > 0 && num < minPositive) {
+        2:   17:                minPositive = num;
+        2:   18:                found = true;
+        -:   19:            }
+        -:   20:        }
+        -:   21:
+        2:   22:        if (!found) {
+        1:   23:            throw std::runtime_error("Масив не містить позитивних чисел.");
+        -:   24:        }
+        1:   25:        return minPositive;
+        -:   26:    }
+        -:   27:
+        2:   28:    static int sumNegative(const std::vector<int>& arr) {
+        2:   29:        int sum = 0;
+        8:   30:        for (int num : arr) {
+        6:   31:            if (num < 0) {
+        3:   32:                sum += num;
+        -:   33:            }
+        -:   34:        }
+        2:   35:        return sum;
+        -:   36:    }
+        -:   37:
+        2:   38:    static int fibonacci(int n) {
+        2:   39:        if (n < 0) {
+        1:   40:            throw std::invalid_argument("Індекс послідовності Фібоначчі не може бути від'ємним.");
+        -:   41:        }
+        -:   42:
+       1*:   43:        if (n == 0) return 0;
+       1*:   44:        if (n == 1) return 1;
+        -:   45:
+        1:   46:        int prev1 = 0, prev2 = 1, current = 0;
+       10:   47:        for (int i = 2; i <= n; ++i) {
+        9:   48:            current = prev1 + prev2;
+        9:   49:            prev1 = prev2;
+        9:   50:            prev2 = current;
+        -:   51:        }
+        1:   52:        return current;
+        -:   53:    }
+        -:   54:
+        2:   55:    static double calculateCurrent(double voltage, double resistance) {
+        2:   56:        if (resistance == 0) {
+        1:   57:            throw std::invalid_argument("Опір не може бути нульовим.");
+        -:   58:        }
+        1:   59:        return voltage / resistance;
+        -:   60:    }
+        -:   61:};
+        -:   62:
+        -:   63:// Модульні тести
+        1:   64:void testFindMinPositive() {
+        -:   65:    // Позитивний тест: масив містить позитивні числа
+        1:   66:    std::vector<int> testArray1 = {3, 7, 1, 10};
+        -:   67:    try {
+        1:   68:        int result = Algorithms::findMinPositive(testArray1);
+       1*:   69:        assert(result == 1);
+        1:   70:        std::cout << "testFindMinPositive (positive case): PASS" << std::endl;
+    =====:   71:    } catch (...) {
+    =====:   72:        std::cout << "testFindMinPositive (positive case): FAIL" << std::endl;
+    =====:   73:    }
+        -:   74:
+        -:   75:    // Негативний тест: масив не містить позитивних чисел
+        1:   76:    std::vector<int> testArray2 = {-3, -7, -10};
+        -:   77:    try {
+        1:   78:        Algorithms::findMinPositive(testArray2); // Має викинути виняток
+    #####:   79:        std::cout << "testFindMinPositive (negative case): FAIL" << std::endl;
+        1:   80:    } catch (...) {
+        1:   81:        std::cout << "testFindMinPositive (negative case): PASS" << std::endl;
+        1:   82:    }
+        1:   83:}
+        -:   84:
+        1:   85:void testSumNegative() {
+        -:   86:    // Позитивний тест: масив містить від’ємні числа
+        1:   87:    std::vector<int> testArray1 = {-3, -7, -10};
+        -:   88:    try {
+        1:   89:        int result = Algorithms::sumNegative(testArray1);
+       1*:   90:        assert(result == -20);
+        1:   91:        std::cout << "testSumNegative (positive case): PASS" << std::endl;
+    =====:   92:    } catch (...) {
+    =====:   93:        std::cout << "testSumNegative (positive case): FAIL" << std::endl;
+    =====:   94:    }
+        -:   95:
+        -:   96:    // Негативний тест: масив не містить від’ємних чисел
+        1:   97:    std::vector<int> testArray2 = {3, 7, 10};
+        -:   98:    try {
+        1:   99:        int result = Algorithms::sumNegative(testArray2);
+       1*:  100:        assert(result == 0);
+        1:  101:        std::cout << "testSumNegative (negative case): PASS" << std::endl;
+    =====:  102:    } catch (...) {
+    =====:  103:        std::cout << "testSumNegative (negative case): FAIL" << std::endl;
+    =====:  104:    }
+        1:  105:}
+        -:  106:
+        1:  107:void testFibonacci() {
+        -:  108:    // Позитивний тест: N = 10
+        -:  109:    try {
+        1:  110:        int result = Algorithms::fibonacci(10);
+       1*:  111:        assert(result == 55);
+        1:  112:        std::cout << "testFibonacci (positive case): PASS" << std::endl;
+    =====:  113:    } catch (...) {
+    =====:  114:        std::cout << "testFibonacci (positive case): FAIL" << std::endl;
+    =====:  115:    }
+        -:  116:
+        -:  117:    // Негативний тест: N < 0
+        -:  118:    try {
+        1:  119:        Algorithms::fibonacci(-5); // Має викинути виняток
+    #####:  120:        std::cout << "testFibonacci (negative case): FAIL" << std::endl;
+        1:  121:    } catch (...) {
+        1:  122:        std::cout << "testFibonacci (negative case): PASS" << std::endl;
+        1:  123:    }
+        1:  124:}
+        -:  125:
+        1:  126:void testCalculateCurrent() {
+        -:  127:    // Позитивний тест: Voltage = 10, Resistance = 5
+        -:  128:    try {
+        1:  129:        double result = Algorithms::calculateCurrent(10.0, 5.0);
+       1*:  130:        assert(result == 2.0);
+        1:  131:        std::cout << "testCalculateCurrent (positive case): PASS" << std::endl;
+    =====:  132:    } catch (...) {
+    =====:  133:        std::cout << "testCalculateCurrent (positive case): FAIL" << std::endl;
+    =====:  134:    }
+        -:  135:    // Негативний тест: Resistance = 0
+        -:  136:    try {
+        1:  137:        Algorithms::calculateCurrent(10.0, 0.0); // Має викинути виняток
+    #####:  138:        std::cout << "testCalculateCurrent (negative case): FAIL" << std::endl;
+        1:  139:    } catch (...) {
+        1:  140:        std::cout << "testCalculateCurrent (negative case): PASS" << std::endl;
+        1:  141:    }
+        1:  142:}
+        -:  143:
+        1:  144:int main() {
+        1:  145:    std::cout << "Запуск тестів..." << std::endl;
+        1:  146:    testFindMinPositive();
+        1:  147:    testSumNegative();
+        1:  148:    testFibonacci();
+        1:  149:    testCalculateCurrent();
+        1:  150:    std::cout << "Тестування завершено." << std::endl;
+        1:  151:    return 0;
+        -:  152:}
